@@ -1,0 +1,257 @@
+!*******************************************
+! 150 MeV AWAKE Run 2 Electron Transfer Line
+!
+! C. Bracco, F.M. Velotti, R. Ramjiawan
+!
+!*******************************************
+
+
+TITLE, s='150 MeV Electron Line';
+
+
+!-------------------------------------------------------
+!   Elements
+!-------------------------------------------------------
+
+//-------------- Bending Magnets
+MBH: RBEND, L := 0.6 , apertype = ellipse , FINT := fint_h_var, hgap = 0.02, aperture = {0.04,0.04};  		! Bending magnet, horizontal
+fint_h_var = 0.5;
+
+//-------------- Quadrupoles
+QUAD: QUADRUPOLE, L := 0.3,aperture = {0.02,0.02};
+QUAD30: QUADRUPOLE, L := 0.3,aperture = {0.03,0.03};
+SEXT: SEXTUPOLE, L := 0.2, aperture = {0.02,0.02};
+SEXT30: SEXTUPOLE, L := 0.2, aperture = {0.03,0.03};
+OCT: OCTUPOLE, L := 0.2, aperture = {0.02,0.02};
+OCT30: OCTUPOLE, L := 0.2, aperture = {0.03,0.03};
+
+//-------------- Correctors
+COR: KICKER, L := 0.,   apertype = ellipse, aperture = {0.02,0.02};
+COR30: KICKER, L := 0.,   apertype = ellipse, aperture = {0.03,0.03}; !30 mm aperture
+HCOR: HKICKER, L := 0.0406,   apertype = ellipse, aperture = {0.02,0.02};
+VCOR: VKICKER, L := 0.0406,   apertype = ellipse, aperture = {0.02,0.02};
+
+//-------------- Beam position monitors
+BPM         : MONITOR     , L := 0.0,   apertype = ellipse, aperture = {0.02,0.02};
+BPM30         : MONITOR     , L := 0.0,   apertype = ellipse, aperture = {0.03,0.03};
+BTV         : MONITOR     , L := 0.0,   apertype = ellipse, aperture = {0.02,0.02};
+BTV30         : MONITOR     , L := 0.0,   apertype = ellipse, aperture = {0.03,0.03};
+
+BUNCH_LENGTH   : MONITOR, L := 0.02, apertype = ellipse, aperture = {0.02,0.02};
+
+!-------------------------------------------------------
+!  Start of Sequence
+!-------------------------------------------------------
+
+
+! central positions
+TT43: SEQUENCE, L: =15.317+0.1;
+LQM.0: MARKER, at=-0.225, from=MQAWD.0;
+MQAWD.0: QUAD, AT:= 0.25+dist_q0;                       !QUAD 1
+LQP.0: MARKER, at=0.225, from=MQAWD.0;
+
+LBM.0: MARKER, at=-0.1, from=BPM.0;
+BPM.0: BPM, at=	0.35, from=MQAWD.0;
+CORR.0: COR, at = 0.4, from=MQAWD.0;
+LBP.0: MARKER, at=0.1, from=BPM.0;
+
+LQM.4: MARKER, at=-0.225, from=MQAWD.4;
+MQAWD.4: QUAD, AT:= 1.840+dist_q4;                   !QUAD 2
+LQP.4: MARKER, at=0.225, from=MQAWD.4;
+
+LBM.1: MARKER, at=-0.1, from=BPM.1;
+BPM.1: BPM, at=	0.35, from=MQAWD.4;
+CORR.1: COR, at = 0.4, from=MQAWD.4;
+LBP.1: MARKER, at=0.1, from=BPM.1;
+
+LQM.2: MARKER, at=-0.225, from=MQAWD.2;
+MQAWD.2: QUAD, AT:= 2.933+dist_q2;                      !QUAD 3
+LQP.2: MARKER, at=0.225, from=MQAWD.2;
+
+LBM.2: MARKER, at=-0.1, from=BPM.2;
+BPM.2: BPM, at=	0.35, from=MQAWD.2;
+CORR.2: COR, at = 0.4, from=MQAWD.2;
+LBP.2: MARKER, at=0.1, from=BPM.2;
+
+LBTM.2: MARKER, at=-0.1, from=BTV.2;
+BTV.2: BTV, at=	0.65, from=BPM.2;
+LBTP.2: MARKER, at=0.1, from=BTV.2;
+
+LDM.3: MARKER, at=4.756-0.35;
+MBAWH.3: MBH, AT:=4.756;                               !DIPOLE1
+LDP.3: MARKER, at=4.756+0.35;
+
+LBM.3: MARKER, at=-0.1, from=BPM.3;
+BPM.3: BPM, at = 5.306;
+CORR.3: COR, at= 0.05, from=BPM.3;
+LBP.3: MARKER, at=0.1, from=BPM.3;
+
+LBTM.3: MARKER, at=-0.1, from=BTV.3;
+BTV.3: BTV, at=	0.25, from=BPM.3;
+LBTP.3: MARKER, at=0.1, from=BTV.3;
+
+LSM.3: MARKER, at=-0.17, from=SD3;
+SD3: SEXT30, AT:= 6.102028562592773+dist_s0, K2:=sext0 ;
+LSP.3: MARKER, at=0.17, from=SD3;
+
+LQM.9: MARKER, at=-0.225, from=MQAWD.9;
+MQAWD.9: QUAD30, AT:= 6.588+dist_q1;                    !QUAD 4
+LQP.9: MARKER, at=0.225, from=MQAWD.9;
+
+LSM.1: MARKER, at=-0.17, from=SD1;
+SD1: SEXT30, AT:=6.983+dist_s1, K2:=sext4;
+LSP.1: MARKER, at=0.17, from=SD1;
+
+LQM.6: MARKER, at=-0.225, from=MQAWD.6;
+MQAWD.6: QUAD30, AT:= 7.378+dist_q5;                      !QUAD 5
+LQP.6: MARKER, at=0.225, from=MQAWD.6;
+
+LBM.4: MARKER, at=-0.1, from=BPM.4;
+BPM.4: BPM30, at=	0.35, from=MQAWD.6;
+CORR.4: COR, at = 0.4, from=MQAWD.6;
+LBP.4: MARKER, at=0.1, from=BPM.4;
+
+LBTM.4: MARKER, at=-0.1, from=BTV.4;
+BTV.4: BTV30, at=	0.25, from=BPM.4;
+LBTP.4: MARKER, at=0.1, from=BTV.4;
+
+LSM.5: MARKER, at=-0.17, from=SD5;
+SD5: SEXT, AT:=8.463913352872668+dist_s2, K2:=sext1 ;
+LSP.5: MARKER, at= 0.17, from=SD5;
+
+LBM.5: MARKER, at=-0.1, from=BPM.5;
+BPM.5: BPM, at=	0.35, from=SD5;
+CORR.5: COR, at = 0.4, from=SD5;
+LBP.5: MARKER, at=0.1, from=BPM.5;
+
+LSM.2: MARKER, at=-0.17, from=SD2;
+SD2: SEXT, AT:= 9.275506856931855+dist_s3,K2:=sext5 ;
+LSP.2: MARKER, at=0.17, from=SD2;
+
+LQM.10: MARKER, at=-0.225, from=MQAWD.10;
+MQAWD.10: QUAD, AT:= 9.774 ;                             !QUAD 6
+LQP.10: MARKER, at=0.225, from=MQAWD.10;
+
+LBM.6: MARKER, at=-0.1, from=BPM.6;
+BPM.6: BPM, at=	0.35, from=MQAWD.10;
+CORR.6: COR, at = 0.4, from=MQAWD.10;
+LBP.6: MARKER, at=0.1, from=BPM.6;
+
+
+BL.1: BUNCH_LENGTH, at= 0.25, from=BPM.6;
+
+
+LSM.6: MARKER, at=-0.17, from=SD6;
+SD6: SEXT, AT:=10.908539964714095+dist_s4, K2:=sext2 ;
+LSP.6: MARKER, at= 0.17, from=SD6;
+
+LOM.7: MARKER, at=-0.135, from=OCT7;
+OCT7: OCT, AT:=11.367460072471937+dist_o1, K3:=oct2 ;
+LOP.7: MARKER, at= 0.135, from=OCT7;
+
+LBM.7: MARKER, at=-0.1, from=BPM.7;
+BPM.7: BPM, at=	0.35, from=OCT7;
+CORR.7: COR, at = 0.4, from=OCT7;
+LBP.7: MARKER, at=0.1, from=BPM.7;
+
+LQM.14: MARKER, at=-0.225, from=MQAWD.14;
+MQAWD.14: QUAD, AT:= 12.17-dist_q5;                         !QUAD 7
+LQP.14: MARKER, at=0.225, from=MQAWD.14;
+
+LOM.6: MARKER, at=-0.135, from=OCT6;
+OCT6: OCT, AT:= 12.53+dist_o2, K3:=oct0 ;
+LOP.6: MARKER, at= 0.135, from=OCT6;
+
+LQM.11: MARKER, at=-0.225, from=MQAWD.11;
+MQAWD.11: QUAD, AT:=12.96-dist_q1;                           !QUAD 8
+LQP.11: MARKER, at=0.225, from=MQAWD.11;
+
+LSM.4: MARKER, at=-0.17, from=SD4;
+SD4: SEXT, AT:= 13.36, K2:=sext3 ;
+LSP.4: MARKER, at=0.17, from=SD4;
+
+LOM.11: MARKER, at=-0.135, from=OCT11;
+OCT11: OCT, AT:=13.675-0.01+dist_o3, K3:=oct1 ;
+LOP.11: MARKER, at=0.135, from=OCT11;
+
+LBM.8: MARKER, at=-0.1, from=BPM.8;
+BPM.8: BPM, at = 0.35, from=OCT11;
+CORR.8: COR, at = 0.4, from=OCT11;
+LBP.8: MARKER, at=0.1, from=BPM.8;
+
+LBTM.8: MARKER, at=-0.1, from=BTV.8;
+BTV.8: BTV, at=	0.6, from=OCT11;
+LBTP.8: MARKER, at=0.1, from=BTV.8;
+
+LDM.8: MARKER, at=14.792-0.35;
+MBAWH.8: MBH, AT:= 14.792;   !DIPOLE2
+LDP.8: MARKER, at=14.792+0.35;
+
+FOIL1:MARKER, AT:=15.317-0.002;
+FOIL2:MARKER, AT:=15.317-0.001;
+merge: MARKER, AT:=15.317;
+
+endsequence;
+
+bendangle:=-15*PI/180.0;
+MBAWH.8, ANGLE:= bendangle, TILT:=0;
+MBAWH.3,ANGLE:= -bendangle, TILT:=0 ;
+
+!!! Reference optics !!!
+quad0=1.4305269096909254;
+quad1=4.389518465570255;
+quad2=7.897355074613861;
+quad3=4.201377505310179;
+quad4=-5.254599391447313;
+quad5=-3.465904348351117;
+
+sext0=73.65634828171888;
+sext1=30.870509879672166;
+sext2=22.01099036438686;
+sext3=-24.688610062207673;
+sext4=-53.01798140148449;
+sext5=-94.07739827897126;
+
+
+oct0=-208.57373589036763;
+oct1=2844.666880229662;
+oct2=-328.29496694078165;
+
+
+
+
+
+MQAWD.0 , K1    :=  quad0;
+MQAWD.4 , K1    :=  quad4;
+MQAWD.2 , K1    :=  quad2;
+MQAWD.9 , K1    :=  quad1;
+MQAWD.6 , K1    :=  quad5;
+MQAWD.10 , K1   :=  quad3;
+MQAWD.14 , K1   :=  quad5;
+MQAWD.11 , K1   :=  quad1;
+
+
+distfixed:= 0;
+
+dist_q0=0;
+dist_q1=0;
+dist_q2=0;
+dist_q4=0;
+dist_q5=0;
+dist_o1=0;
+dist_o2=0;
+dist_o3=0;
+dist_s0=0;
+dist_s1=0;
+dist_s2=0;
+dist_s3=0;
+dist_s4=0;
+
+distfixed:= 0;
+
+
+USE, SEQUENCE=TT43;
+USEKICK,    Status = on;
+USEMONITOR, Status = off;
+
+set, format="15.9f";
