@@ -86,6 +86,7 @@ tw.show()
 # drift_5                       0.6             0             0
 # ...
 
+# To see only the centers of BPMs:
 tw.rows['bpm.*/center']
 # is:
 # name                     s             x            px             y            py ...
